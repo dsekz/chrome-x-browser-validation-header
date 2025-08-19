@@ -3,7 +3,7 @@ import base64
 
 PLATFORM_API_KEYS = {
     "windows": "AIzaSyA2KlwBX3mkFo30om9LUFYQhpqLoa_BNhE",
-    "linux":   "AIzaSyBqJZh-7pA44blAaAkH6490hUFOwX0KCYM",
+    "linux":   "AIzaSyDlUur5xXJ0gBeLFW_D2PtjduqOFQMsqEY",
     "macos":   "AIzaSyDr2UxVnv_U85AbhhY8XSHSIavUW0DC-sY",
 }
 

@@ -55,7 +55,7 @@ print(header_value)
 | Platform | Default Key (found in Chrome binaries)    |
 | -------- | ----------------------------------------- |
 | Windows  | `AIzaSyA2KlwBX3mkFo30om9LUFYQhpqLoa_BNhE` |
-| Linux    | `AIzaSyBqJZh-7pA44blAaAkH6490hUFOwX0KCYM` |
+| Linux    | `AIzaSyDlUur5xXJ0gBeLFW_D2PtjduqOFQMsqEY` |
 | macOS    | `AIzaSyDr2UxVnv_U85AbhhY8XSHSIavUW0DC-sY` |
 
 ---
