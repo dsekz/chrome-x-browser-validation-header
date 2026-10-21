@@ -4,9 +4,9 @@
 Chrome recently added a few new headers:
 ```
 "x-browser-channel": "stable",
-"x-browser-copyright": "Copyright 2025 Google LLC. All rights reserved.",
-"x-browser-validation": "6h3XF8YcD8syi2FF2BbuE2KllQo=",
-"x-browser-year": "2025"
+"x-browser-copyright": "Copyright 2026 Google LLC. All rights reserved.",
+"x-browser-validation": "6q7HZiKEhnYpLUmbisJzG0KzioE=",
+"x-browser-year": "2026"
 ```
 Apart from one of them, there isn’t much that’s interesting. They’re just bits of client specific information. However, base64 decoding x-browser-validation yields what appears to be a hash whose purpose remains undocumented.
 
@@ -17,18 +17,32 @@ Chrome almost certainly uses this header as an integrity signal. Verifying that 
 ## Generator
 
 ```python
-from xbv import generate_validation_header
+# chrome salt fetcher: https://github.com/elyelysiox/chrome-validation-salt
 
+import requests
+import hashlib, base64
 
-ua = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36"
+data = requests.get(
+    "https://raw.githubusercontent.com/elyelysiox/chrome-validation-salt/main/data.json"
+).json()
 
-# You may supply an explicit api_key alongside the ua
-# if omitted, the function automatically selects the appropriate key based on the user agent
+current = data["stable"]["current"]
+major = current["version"].split(".")[0]
+salt = current["salt"]
+
+# windows: AIzaSyA2KlwBX3mkFo30om9LUFYQhpqLoa_BNhE
+# linux:   AIzaSyBqJZh-7pA44blAaAkH6490hUFOwX0KCYM
+# macos:   AIzaSyDr2UxVnv_U85AbhhY8XSHSIavUW0DC-sY
+
 api_key = "AIzaSyA2KlwBX3mkFo30om9LUFYQhpqLoa_BNhE"
+ua  = f"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{major}.0.0.0 Safari/537.36"
 
-header_value = generate_validation_header(ua)
+raw = (salt + api_key + ua).encode()
+digest = hashlib.sha1(raw).digest()
+header = base64.b64encode(digest).decode()
 
-print(header_value)
+print("header:", header)
+print("current:", current)
 ```
 
 ---
@@ -43,7 +57,7 @@ print(header_value)
 2. **Concatenate**
 
    ```
-   DATA = API_KEY + USER_AGENT
+   DATA = SALT + API_KEY + USER_AGENT
    ```
 
 3. **Hash** `DATA` with SHA-1 and base64 encode it.
